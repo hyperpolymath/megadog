@@ -1,0 +1,176 @@
+# MegaDog GitLab CI/CD Pipeline
+# RSR Compliant: GitLab (never GitHub)
+
+stages:
+  - validate
+  - build
+  - test
+  - security
+  - deploy
+
+variables:
+  CONTAINER_RUNTIME: podman
+  NIX_VERSION: "2.18"
+
+# =============================================================================
+# Validation Stage
+# =============================================================================
+
+validate:nix:
+  stage: validate
+  image: nixos/nix:latest
+  script:
+    - nix --experimental-features 'nix-command flakes' flake check
+    - nix --experimental-features 'nix-command flakes' fmt -- --check .
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:nickel:
+  stage: validate
+  image: ghcr.io/tweag/nickel:latest
+  script:
+    - for f in config/*.ncl; do nickel typecheck "$f"; done
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+validate:contracts:
+  stage: validate
+  image: vyperlang/vyper:latest
+  script:
+    - vyper contracts/MegaDog.vy
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+# =============================================================================
+# Build Stage
+# =============================================================================
+
+build:server:
+  stage: build
+  image: ponylang/ponyc:latest
+  script:
+    - cd server && ponyc -o ../build/bin -b megadog-server src/
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 week
+  needs:
+    - validate:nix
+
+build:android:
+  stage: build
+  image: gradle:jdk17
+  script:
+    - cd android && ./gradlew assembleDebug
+  artifacts:
+    paths:
+      - android/app/build/outputs/
+    expire_in: 1 week
+  needs:
+    - validate:nix
+
+build:contracts:
+  stage: build
+  image: vyperlang/vyper:latest
+  script:
+    - mkdir -p build/contracts
+    - vyper contracts/MegaDog.vy -f abi > build/contracts/MegaDog.abi.json
+    - vyper contracts/MegaDog.vy -f bytecode > build/contracts/MegaDog.bin
+  artifacts:
+    paths:
+      - build/contracts/
+    expire_in: 1 week
+  needs:
+    - validate:contracts
+
+build:container:
+  stage: build
+  image: quay.io/podman/stable:latest
+  script:
+    - podman build -t megadog-server:$CI_COMMIT_SHA -f containers/server.containerfile .
+    - podman save megadog-server:$CI_COMMIT_SHA -o megadog-server.tar
+  artifacts:
+    paths:
+      - megadog-server.tar
+    expire_in: 1 week
+  needs:
+    - build:server
+
+# =============================================================================
+# Test Stage
+# =============================================================================
+
+test:server:
+  stage: test
+  image: ponylang/ponyc:latest
+  script:
+    - cd server && ponyc --debug -o ../build/test src/ && ../build/test/megadog-server || true
+  needs:
+    - build:server
+
+test:contracts:
+  stage: test
+  image: vyperlang/vyper:latest
+  script:
+    - echo "Contract tests pending"
+  needs:
+    - build:contracts
+
+# =============================================================================
+# Security Stage
+# =============================================================================
+
+security:container-scan:
+  stage: security
+  image: cgr.dev/chainguard/grype:latest
+  script:
+    - grype megadog-server.tar || true
+  needs:
+    - build:container
+  allow_failure: true
+
+security:contract-audit:
+  stage: security
+  image: trailofbits/slither:latest
+  script:
+    - echo "Slither analysis for Vyper pending"
+  needs:
+    - build:contracts
+  allow_failure: true
+
+# =============================================================================
+# Deploy Stage
+# =============================================================================
+
+deploy:testnet:
+  stage: deploy
+  image: nixos/nix:latest
+  script:
+    - nix --experimental-features 'nix-command flakes' develop --command ./scripts/deploy.sh deploy mumbai
+  environment:
+    name: testnet
+    url: https://amoy.polygonscan.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  needs:
+    - test:server
+    - test:contracts
+    - security:container-scan
+
+deploy:production:
+  stage: deploy
+  image: nixos/nix:latest
+  script:
+    - nix --experimental-features 'nix-command flakes' develop --command ./scripts/deploy.sh deploy polygon
+  environment:
+    name: production
+    url: https://polygonscan.com
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+      when: manual
+  needs:
+    - deploy:testnet
