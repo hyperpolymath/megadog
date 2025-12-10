@@ -1,0 +1,23 @@
+# CITATION.cff - Citation File Format for megadog
+# https://citation-file-format.github.io/
+# SPDX-License-Identifier: AGPL-3.0-or-later OR LicenseRef-Palimpsest-0.5
+
+cff-version: 1.2.0
+title: "megadog"
+message: "If you use this software, please cite it as below."
+type: software
+authors:
+  - family-names: "Polymath"
+    given-names: "Hyper"
+    email: "hyperpolymath@proton.me"
+    affiliation: "Rhodium Standard / Independent Researcher"
+repository-code: "https://github.com/hyperpolymath/megadog"
+url: "https://rhodium.sh/projects/megadog"
+abstract: "Foundation complete, skeleton code in place, route to MVP requires integration work"
+keywords:
+  - RSR
+  - rhodium-standard
+license: "AGPL-3.0-or-later"
+license-url: "https://github.com/hyperpolymath/megadog/blob/main/LICENSE.txt"
+version: "0.1.0"
+date-released: "2025-12-10"

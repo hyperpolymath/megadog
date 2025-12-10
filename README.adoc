@@ -1,36 +1,36 @@
-# MegaDog
+= MegaDog
 
-**Ethical merge game with Mandelbrot dogtags - no scams, just math.**
+*Ethical merge game with Mandelbrot dogtags - no scams, just math.*
 
 [![RSR Compliant](https://img.shields.io/badge/RSR-Compliant-gold)](./MANIFESTO.md)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](./LICENSE)
 
-## What is MegaDog?
+== What is MegaDog?
 
 MegaDog is an ethical remake of predatory mobile "merge dog" games. Instead of fake money promises and psychological manipulation, we offer:
 
-- **Real Ownership**: Your dogs are NFTs you actually own
-- **Beautiful Math**: Unique Mandelbrot fractals as dogtags
-- **Transparent Economics**: All code open source, all odds public
-- **Memory-Safe Stack**: Pony + Vyper + Kotlin (no exploits)
+- *Real Ownership*: Your dogs are NFTs you actually own
+- *Beautiful Math*: Unique Mandelbrot fractals as dogtags
+- *Transparent Economics*: All code open source, all odds public
+- *Memory-Safe Stack*: Pony + Vyper + Kotlin (no exploits)
 
-## Quick Start
+== Quick Start
 
 ```bash
-# Enter development environment
+= Enter development environment
 nix develop
 
-# See available commands
+= See available commands
 just
 
-# Build everything
+= Build everything
 just build-all
 
-# Run server
+= Run server
 just container-run
 ```
 
-## Architecture
+== Architecture
 
 ```
 ┌─────────────────────────────────────┐
@@ -54,7 +54,7 @@ just container-run
 └─────────────────────────────────────┘
 ```
 
-## The Innovation: Logarithmic Storage
+== The Innovation: Logarithmic Storage
 
 Traditional games store values directly:
 ```
@@ -66,9 +66,9 @@ MegaDog stores logarithmically:
 log_treats = ln(1,000,000,000) × 10^6 = 20,723,266  (int128: 16 bytes)
 ```
 
-**Result**: 50% storage reduction, ~30% gas savings at scale.
+*Result*: 50% storage reduction, ~30% gas savings at scale.
 
-## Mandelbrot Dogtags
+== Mandelbrot Dogtags
 
 Each dog generates a unique 3D Mandelbulb fractal based on:
 - Dog level (complexity)
@@ -80,18 +80,18 @@ These fractals are:
 - Beautiful (actual mathematical art)
 - Exportable (4K wallpapers, NFT metadata)
 
-## RSR Compliance
+== RSR Compliance
 
 This project follows the Rhodium Standard Repository specification:
 
-- ✅ **Nix flakes** for hermetic builds
-- ✅ **Nickel** for type-safe configuration
-- ✅ **Justfile** for comprehensive CLI
-- ✅ **Podman** with Wolfi base images
-- ✅ **GitLab** for source control
-- ✅ **Memory-safe languages** throughout
+- ✅ *Nix flakes* for hermetic builds
+- ✅ *Nickel* for type-safe configuration
+- ✅ *Justfile* for comprehensive CLI
+- ✅ *Podman* with Wolfi base images
+- ✅ *GitLab* for source control
+- ✅ *Memory-safe languages* throughout
 
-## Project Structure
+== Project Structure
 
 ```
 megadog/
@@ -108,33 +108,33 @@ megadog/
 └── docs/              # Documentation
 ```
 
-## Commands
+== Commands
 
 ```bash
-# Development
+= Development
 just dev              # Enter Nix shell
 just validate         # Validate all configs
 just fmt              # Format code
 
-# Build
+= Build
 just build-server     # Build Pony server
 just build-android    # Build Android app
 just build-all        # Build everything
 
-# Containers
+= Containers
 just container-build  # Build with Podman
 just container-run    # Run locally
 just container-scan   # Security scan
 
-# Contracts
+= Contracts
 just contracts-compile  # Compile Vyper
 just contracts-deploy   # Deploy to testnet
 
-# Testing
+= Testing
 just test-all         # Run all tests
 ```
 
-## Philosophy
+== Philosophy
 
 Read [MANIFESTO.md](./MANIFESTO.md) for why we built this.
 
@@ -142,7 +142,7 @@ Read [ARCHITECTURE.md](./ARCHITECTURE.md) for how it works.
 
 Read [CONTRIBUTING.md](./CONTRIBUTING.md) to help out.
 
-## License
+== License
 
 AGPL-3.0 - Because games should be games, not slot machines.
 
