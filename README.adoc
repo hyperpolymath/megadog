@@ -1,151 +1,76 @@
-= MegaDog
+= megadog
+Jonathan D.A. Jewell <jonathan.jewell@gmail.com>
+:toc: macro
+:icons: font
+:source-highlighter: rouge
+:experimental:
+:url-github: https://github.com/hyperpolymath/megadog
+:url-gitlab: https://gitlab.com/hyperpolymath/megadog
+:url-bitbucket: https://bitbucket.org/hyperpolymath/megadog
+:url-codeberg: https://codeberg.org/hyperpolymath/megadog
 
-*Ethical merge game with Mandelbrot dogtags - no scams, just math.*
+Mega-scale dog-fooding automation
 
-[![RSR Compliant](https://img.shields.io/badge/RSR-Compliant-gold)](./MANIFESTO.md)
-[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](./LICENSE)
+image:https://img.shields.io/badge/RSR-Certified-gold[RSR Certified]
+image:https://img.shields.io/badge/License-AGPL%20v3-blue[License]
 
-== What is MegaDog?
+toc::[]
 
-MegaDog is an ethical remake of predatory mobile "merge dog" games. Instead of fake money promises and psychological manipulation, we offer:
+== Overview
 
-- *Real Ownership*: Your dogs are NFTs you actually own
-- *Beautiful Math*: Unique Mandelbrot fractals as dogtags
-- *Transparent Economics*: All code open source, all odds public
-- *Memory-Safe Stack*: Pony + Vyper + Kotlin (no exploits)
+megadog is part of the link:https://rhodium.sh[Rhodium Standard] (RSR) ecosystem.
 
-== Quick Start
+Domain: *software-development*
 
-```bash
-= Enter development environment
-nix develop
+== Installation
 
-= See available commands
-just
+[source,bash]
+----
+# Clone from GitHub (primary)
+git clone {url-github}
 
-= Build everything
-just build-all
+# Or from mirrors
+git clone {url-gitlab}
+git clone {url-codeberg}
+----
 
-= Run server
-just container-run
-```
+== RSR Stack
 
-== Architecture
+This project follows RSR conventions:
 
-```
-┌─────────────────────────────────────┐
-│        Android Client (Kotlin)       │
-│  • Merge UI • Mandelbrot Renderer   │
-└─────────────┬───────────────────────┘
-              │ WebSocket
-              ▼
-┌─────────────────────────────────────┐
-│        Pony Game Server             │
-│  • State Management • Anti-Cheat    │
-│  • Batch Aggregation                │
-└─────────────┬───────────────────────┘
-              │ Batched Diffs
-              ▼
-┌─────────────────────────────────────┐
-│        Polygon Blockchain           │
-│  • Vyper Contracts                  │
-│  • Logarithmic Storage              │
-│  • NFT Ownership                    │
-└─────────────────────────────────────┘
-```
+* ✅ ReScript for frontend/logic
+* ✅ Deno for JS runtime
+* ✅ WASM for performance-critical code
+* ✅ Rust/OCaml/Haskell for systems/proofs
+* ✅ Guile/Scheme for configuration
+* ❌ No TypeScript
+* ❌ No Go
+* ❌ No npm
 
-== The Innovation: Logarithmic Storage
+== Mirrors
 
-Traditional games store values directly:
-```
-treats = 1,000,000,000  (uint256: 32 bytes)
-```
+[cols="1,2"]
+|===
+| Platform | URL
 
-MegaDog stores logarithmically:
-```
-log_treats = ln(1,000,000,000) × 10^6 = 20,723,266  (int128: 16 bytes)
-```
-
-*Result*: 50% storage reduction, ~30% gas savings at scale.
-
-== Mandelbrot Dogtags
-
-Each dog generates a unique 3D Mandelbulb fractal based on:
-- Dog level (complexity)
-- Merge history (seed)
-- Birth timestamp (entropy)
-
-These fractals are:
-- Deterministic (reproducible by anyone)
-- Beautiful (actual mathematical art)
-- Exportable (4K wallpapers, NFT metadata)
-
-== RSR Compliance
-
-This project follows the Rhodium Standard Repository specification:
-
-- ✅ *Nix flakes* for hermetic builds
-- ✅ *Nickel* for type-safe configuration
-- ✅ *Justfile* for comprehensive CLI
-- ✅ *Podman* with Wolfi base images
-- ✅ *GitLab* for source control
-- ✅ *Memory-safe languages* throughout
-
-== Project Structure
-
-```
-megadog/
-├── android/           # Kotlin Android app
-│   └── app/src/main/kotlin/com/megadog/
-│       ├── renderer/  # Mandelbrot GPU renderer
-│       └── game/      # Game logic & client
-├── server/            # Pony game server
-│   └── src/           # Actor-based architecture
-├── contracts/         # Vyper smart contracts
-├── config/            # Nickel configurations
-├── containers/        # Podman containerfiles
-├── scripts/           # Deployment scripts
-└── docs/              # Documentation
-```
-
-== Commands
-
-```bash
-= Development
-just dev              # Enter Nix shell
-just validate         # Validate all configs
-just fmt              # Format code
-
-= Build
-just build-server     # Build Pony server
-just build-android    # Build Android app
-just build-all        # Build everything
-
-= Containers
-just container-build  # Build with Podman
-just container-run    # Run locally
-just container-scan   # Security scan
-
-= Contracts
-just contracts-compile  # Compile Vyper
-just contracts-deploy   # Deploy to testnet
-
-= Testing
-just test-all         # Run all tests
-```
-
-== Philosophy
-
-Read [MANIFESTO.md](./MANIFESTO.md) for why we built this.
-
-Read [ARCHITECTURE.md](./ARCHITECTURE.md) for how it works.
-
-Read [CONTRIBUTING.md](./CONTRIBUTING.md) to help out.
+| GitHub (primary) | {url-github}
+| GitLab | {url-gitlab}
+| Bitbucket | {url-bitbucket}
+| Codeberg | {url-codeberg}
+|===
 
 == License
 
-AGPL-3.0 - Because games should be games, not slot machines.
+Licensed under AGPL-3.0-or-later OR LicenseRef-Palimpsest-0.5.
 
----
+See link:LICENSE[LICENSE] for details.
 
-*The dogs deserve better. So do the players.*
+== Contributing
+
+See link:CONTRIBUTING.adoc[CONTRIBUTING.adoc].
+
+== Metadata
+
+* Domain: software-development
+* Framework: RSR (Rhodium Standard Repository)
+* Dublin Core: link:.well-known/dc.xml[.well-known/dc.xml]
