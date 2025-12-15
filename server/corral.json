@@ -1,0 +1,21 @@
+{
+  "info": {
+    "name": "megadog-server",
+    "version": "0.1.0",
+    "description": "MegaDog Game Server - Actor-based game backend with logarithmic storage efficiency"
+  },
+  "deps": [
+    {
+      "locator": "github.com/ponylang/net.git",
+      "version": ">=0.3.0"
+    },
+    {
+      "locator": "github.com/ponylang/collections.git",
+      "version": ">=0.1.0"
+    },
+    {
+      "locator": "github.com/ponylang/time.git",
+      "version": ">=0.1.0"
+    }
+  ]
+}

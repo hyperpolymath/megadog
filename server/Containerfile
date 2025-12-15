@@ -1,0 +1,43 @@
+# MegaDog Server Container
+# RSR Compliant: Pony Actor Model, Podman over Docker
+
+# Build stage
+FROM ghcr.io/ponylang/ponyc:latest AS builder
+
+WORKDIR /app
+
+# Copy source
+COPY src/ ./src/
+COPY corral.json ./
+COPY Makefile ./
+
+# Install corral and build
+RUN apt-get update && apt-get install -y make curl \
+    && curl -sSL https://raw.githubusercontent.com/ponylang/corral/main/corral.tar.gz | tar xz -C /usr/local/bin \
+    && make release
+
+# Runtime stage
+FROM debian:bookworm-slim
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+
+# Copy binary from builder
+COPY --from=builder /app/build/megadog-server ./megadog-server
+
+# Create non-root user
+RUN useradd -r -s /bin/false megadog
+USER megadog
+
+# Expose WebSocket port
+EXPOSE 8080
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8080/health || exit 1
+
+# Run server
+CMD ["./megadog-server"]

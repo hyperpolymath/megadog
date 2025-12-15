@@ -3,6 +3,7 @@
 
 ### Allowed Languages (Primary → Fallback)
 - **Systems/ML**: Rust
+- **Actor Systems**: Pony (memory-safe, zero-copy messaging, GC-free)
 - **Web/Scripts**: ReScript → TypeScript (legacy only)
 - **TUI**: Ada/SPARK
 - **WordPress**: PHP (with security CI)
