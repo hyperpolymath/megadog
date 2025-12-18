@@ -31,6 +31,15 @@
   - GitLab CI/CD pipeline
   - Guix/Nix package management
 
+- **Security & CI/CD** (updated 2025-12-17)
+  - SHA-pinned GitHub Actions (all 11 workflows)
+  - SPDX-License-Identifier headers on all workflow files
+  - OSSF Scorecard integration
+  - CodeQL security analysis
+  - TruffleHog secrets scanning
+  - HTTPS-only policy enforcement
+  - No weak crypto (MD5/SHA1) policy
+
 ### 🔄 In Progress (from STATE.scm)
 - Bridge contracts (multi-chain)
 - Tournament system
@@ -142,10 +151,12 @@ cd ../android
 - [ ] Anti-cheat threshold tuned (> 90% accuracy)
 - [ ] Batch size optimized (100 diffs default)
 - [ ] Contract verified on PolygonScan
-- [ ] No hardcoded secrets in code
-- [ ] HTTPS only for all endpoints
+- [x] No hardcoded secrets in code (TruffleHog CI)
+- [x] HTTPS only for all endpoints (CI enforced)
 - [ ] Rate limiting configured
 - [ ] Monitoring dashboards ready
+- [x] SHA-pinned GitHub Actions (supply chain security)
+- [x] SPDX license headers (compliance)
 
 ---
 

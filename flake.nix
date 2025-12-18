@@ -81,17 +81,19 @@
         ];
 
         # Vyper from source (memory-safe Python alternative pending)
-        vyperPkg = pkgs.python3Packages.buildPythonPackage rec {
-          pname = "vyper";
-          version = "0.3.10";
-          src = pkgs.fetchFromGitHub {
-            owner = "vyperlang";
-            repo = "vyper";
-            rev = "v${version}";
-            sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
-          };
-          doCheck = false;
-        };
+        # NOTE: Commented out - placeholder hash needs to be computed with:
+        #   nix-prefetch-url --unpack https://github.com/vyperlang/vyper/archive/v0.3.10.tar.gz
+        # vyperPkg = pkgs.python3Packages.buildPythonPackage rec {
+        #   pname = "vyper";
+        #   version = "0.3.10";
+        #   src = pkgs.fetchFromGitHub {
+        #     owner = "vyperlang";
+        #     repo = "vyper";
+        #     rev = "v${version}";
+        #     sha256 = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=";
+        #   };
+        #   doCheck = false;
+        # };
 
       in {
         # Development shell

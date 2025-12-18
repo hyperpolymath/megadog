@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 name: Code Quality
 on: [push, pull_request]
 
@@ -5,14 +6,14 @@ jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
       - name: Check file permissions
         run: |
           find . -type f -perm /111 -name "*.sh" | head -10 || true
       
       - name: Check for secrets
-        uses: trufflesecurity/trufflehog@main
+        uses: trufflesecurity/trufflehog@05cccb53bc9e13bc6d17997db5a6bcc3df44bf2f # v3.92.3
         with:
           path: ./
           base: ${{ github.event.pull_request.base.sha || github.event.before }}
@@ -29,13 +30,13 @@ jobs:
           find . -type f -size +1M -not -path "./.git/*" | head -10 || echo "No large files"
       
       - name: EditorConfig check
-        uses: editorconfig-checker/action-editorconfig-checker@main
+        uses: editorconfig-checker/action-editorconfig-checker@8d9ca9cf96953707b7299eaec419c6cfcd3a65ac # main
         continue-on-error: true
 
   docs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Check documentation
         run: |
           MISSING=""

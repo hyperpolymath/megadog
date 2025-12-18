@@ -1,10 +1,11 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
 name: Language Policy Enforcement
 on: [push, pull_request]
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
       - name: Enforce language policies
         run: |
           # Block new Python files (except SaltStack)
