@@ -1,0 +1,74 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+name: hackenbush-ssg CI
+
+permissions: read-all
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'ssg/**'
+      - 'deno.json'
+  pull_request:
+    paths:
+      - 'ssg/**'
+      - 'deno.json'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Validate RLE pattern file exists
+        run: |
+          if [ -f ssg/src/hackenbush.rle ]; then
+            echo "OK: Life pattern file found"
+            head -20 ssg/src/hackenbush.rle
+          else
+            echo "ERROR: ssg/src/hackenbush.rle not found!"
+            exit 1
+          fi
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
+        with:
+          deno-version: v2.x
+
+      - name: Validate host runtime syntax
+        run: deno check ssg/runtime/host.ts
+
+      - name: Test SSG build (dry run)
+        run: |
+          deno run --allow-read --allow-write ssg/runtime/host.ts ssg/src/hackenbush.rle 1000 _site/test.html
+          echo "SSG test completed"
+
+  language-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Verify Life patterns only in ssg/src/
+        run: |
+          echo "Checking for FORBIDDEN languages in ssg/src/..."
+          forbidden=$(find ssg/src/ -type f \( -name "*.js" -o -name "*.ts" -o -name "*.py" \) 2>/dev/null || true)
+          if [ -n "$forbidden" ]; then
+            echo "ERROR: Found FORBIDDEN language files in ssg/src/:"
+            echo "$forbidden"
+            echo ""
+            echo "hackenbush-ssg MUST use Life patterns (.rle files) as the program!"
+            echo "JavaScript/TypeScript/Python are FORBIDDEN for SSG logic!"
+            exit 1
+          fi
+          echo "OK: Only Life pattern files in ssg/src/"
+
+      - name: Verify host runtime is I/O only
+        run: |
+          echo "Checking host runtime doesn't contain SSG logic..."
+          if grep -E 'generateHtml|parseMarkdown|template|routing' ssg/runtime/host.ts; then
+            echo "WARNING: Host runtime may contain SSG logic!"
+            echo "The host should ONLY provide simulation + I/O."
+            exit 1
+          fi
+          echo "OK: Host runtime appears to be I/O only"

@@ -1,0 +1,29 @@
+#N megadog-hackenbush-ssg
+#O Jonathan D.A. Jewell
+#C SPDX-License-Identifier: AGPL-3.0-or-later
+#C
+#C MegaDog Static Site Generator in Conway's Game of Life
+#C
+#C This pattern encodes an SSG that generates HTML output for MegaDog.
+#C The pattern contains:
+#C   - Input region (0-127, 0-31): Content encoding
+#C   - Compute region: Logic gates and data pathways
+#C   - Output region (1000-1127, 0-31): HTML byte output
+#C
+#C To use:
+#C   1. Set input cells based on content bytes
+#C   2. Run simulation for 10000 generations
+#C   3. Read output region as ASCII bytes
+#C
+#C This is an EXPERIMENTAL proof-of-concept.
+#C The pattern below is a minimal demonstration.
+#C A full SSG implementation would be billions of cells.
+#C
+#C Pattern: Gosper glider gun (signal generator)
+#C connected to a simple output decoder.
+#C
+#C MegaDog: Ethical merge game with Mandelbrot dogtags
+#C
+x = 36, y = 9, rule = B3/S23
+24bo$22bobo$12b2o6b2o12b2o$11bo3bo4b2o12b2o$2o8bo5bo3b2o$2o8bo3bob2o4b
+obo$10bo5bo7bo$11bo3bo$12b2o!

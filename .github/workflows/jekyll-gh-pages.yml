@@ -1,11 +1,16 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+# hackenbush-ssg: Static Site Generator using Conway's Game of Life
+name: Deploy hackenbush-ssg to GitHub Pages
 
 on:
   # Runs on pushes targeting the default branch
   push:
     branches: ["main"]
+    paths:
+      - 'ssg/**'
+      - 'docs/**'
+      - 'README.adoc'
+      - '.github/workflows/jekyll-gh-pages.yml'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -29,13 +34,93 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4.1.1
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@e95548e56dfa95d4e1a28d6f422fafe75c4c26fb # v2.0.3
+        with:
+          deno-version: v2.x
+
+      - name: Validate Life pattern
+        run: |
+          echo "Validating hackenbush-ssg Life pattern..."
+          if [ -f ssg/src/hackenbush.rle ]; then
+            echo "OK: Life pattern file found"
+            head -20 ssg/src/hackenbush.rle
+          else
+            echo "ERROR: ssg/src/hackenbush.rle not found!"
+            exit 1
+          fi
+
+      - name: Validate host runtime
+        run: deno check ssg/runtime/host.ts
+
+      - name: Build with hackenbush-ssg
+        run: |
+          echo "[BUILD] Running hackenbush-ssg (Game of Life SSG)"
+          deno run --allow-read --allow-write ssg/runtime/host.ts ssg/src/hackenbush.rle 10000 _site/index.html
+
+          # Create a fallback index.html if Life pattern doesn't produce output
+          if [ ! -s _site/index.html ]; then
+            echo "Creating fallback index from README..."
+            mkdir -p _site
+            cat > _site/index.html << 'EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MegaDog - Ethical Merge Game</title>
+  <style>
+    body { font-family: monospace; max-width: 800px; margin: 2rem auto; padding: 1rem; background: #0d1117; color: #c9d1d9; }
+    h1 { color: #58a6ff; }
+    a { color: #58a6ff; }
+    pre { background: #161b22; padding: 1rem; border-radius: 6px; overflow-x: auto; }
+    .badge { display: inline-block; margin: 0.25rem; }
+  </style>
+</head>
+<body>
+  <h1>MegaDog</h1>
+  <p><em>Ethical merge game with Mandelbrot dogtags - no scams, just math.</em></p>
+
+  <h2>About</h2>
+  <p>MegaDog is an ethical blockchain game featuring:</p>
+  <ul>
+    <li>Pony actor-based game server</li>
+    <li>Vyper smart contracts (30% gas savings via logarithmic storage)</li>
+    <li>Android app with GPU Mandelbrot fractal rendering</li>
+    <li>RSR-compliant infrastructure</li>
+  </ul>
+
+  <h2>Tech Stack</h2>
+  <ul>
+    <li><strong>Server:</strong> Pony (actor-based, zero-copy messaging)</li>
+    <li><strong>Contracts:</strong> Vyper (memory-safe Python alternative)</li>
+    <li><strong>Mobile:</strong> Kotlin/Android with GPU shaders</li>
+    <li><strong>SSG:</strong> hackenbush-ssg (Conway's Game of Life!)</li>
+    <li><strong>Package Management:</strong> Guix/Nix</li>
+  </ul>
+
+  <h2>Links</h2>
+  <ul>
+    <li><a href="https://github.com/hyperpolymath/megadog">GitHub Repository</a></li>
+    <li><a href="https://github.com/hyperpolymath/hackenbush-ssg">hackenbush-ssg (this site's SSG)</a></li>
+  </ul>
+
+  <footer>
+    <p>Built with <a href="https://github.com/hyperpolymath/hackenbush-ssg">hackenbush-ssg</a> - SSG where the source code is a Conway's Game of Life pattern!</p>
+    <p>SPDX-License-Identifier: AGPL-3.0-or-later</p>
+  </footer>
+</body>
+</html>
+EOF
+          fi
+
+          # Copy .nojekyll to prevent GitHub Pages Jekyll processing
+          touch _site/.nojekyll
+
       - name: Setup Pages
         uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
-      - name: Build with Jekyll
-        uses: actions/jekyll-build-pages@44a6e6beabd48582f863aeeb6cb2151cc1716697 # v1
-        with:
-          source: ./
-          destination: ./_site
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
 

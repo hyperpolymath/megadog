@@ -1,0 +1,16 @@
+{
+  "name": "megadog-ssg",
+  "version": "0.1.0",
+  "exports": "./ssg/runtime/host.ts",
+  "tasks": {
+    "ssg": "deno run --allow-read --allow-write ssg/runtime/host.ts",
+    "ssg:build": "deno run --allow-read --allow-write ssg/runtime/host.ts ssg/src/hackenbush.rle 10000 _site/index.html",
+    "test": "deno test --allow-read --allow-write",
+    "lint": "deno lint",
+    "fmt": "deno fmt"
+  },
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitAny": true
+  }
+}
