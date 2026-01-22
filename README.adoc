@@ -156,7 +156,7 @@ Read [CONTRIBUTING.md](./CONTRIBUTING.md) to help out.
 
 == License
 
-AGPL-3.0 - Because games should be games, not slot machines.
+PMPL-1.0 - Because games should be games, not slot machines.
 
 ---
 
