@@ -161,3 +161,8 @@ PMPL-1.0 - Because games should be games, not slot machines.
 ---
 
 *The dogs deserve better. So do the players.*
+
+
+== Architecture
+
+See link:TOPOLOGY.md[TOPOLOGY.md] for a visual architecture map and completion dashboard.
