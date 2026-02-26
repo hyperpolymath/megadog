@@ -13,7 +13,7 @@ image:[Palimpsest,link="https://github.com/hyperpolymath/palimpsest-license"]
 MegaDog is an ethical remake of predatory mobile "merge dog" games. Instead of fake money promises and psychological manipulation, we offer:
 
 - *Real Ownership*: Your dogs are NFTs you actually own
-- *Beautiful Math*: Unique Mandelbrot fractals as dogtags
+- *Beautiful Maths*: Unique Mandelbrot fractals as dogtags
 - *Transparent Economics*: All code open source, all odds public
 - *Memory-Safe Stack*: Pony + Vyper + Kotlin (no exploits)
 
