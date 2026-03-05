@@ -256,3 +256,8 @@ status:
 mandelbrot-preview seed="0x1234567890abcdef":
     @echo "Generating Mandelbrot preview for seed {{seed}}..."
     cd tools && kotlin MandelbrotPreview.kt {{seed}}
+
+# [AUTO-GENERATED] Multi-arch / RISC-V target
+build-riscv:
+	@echo "Building for RISC-V..."
+	cross build --target riscv64gc-unknown-linux-gnu
