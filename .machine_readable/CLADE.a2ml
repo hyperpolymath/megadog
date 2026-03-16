@@ -1,0 +1,26 @@
+# SPDX-License-Identifier: PMPL-1.0-or-later
+# Clade declaration — part of the gv-clade-index registry
+# See: https://github.com/hyperpolymath/gv-clade-index
+
+[identity]
+uuid = "82d6362e-1a6f-5fbc-959b-f992cc5b9a43"
+primary-forge = "github"
+primary-owner = "hyperpolymath"
+canonical-name = "megadog"
+prefixed-name = "rm-megadog"
+
+[clade]
+primary = "rm"
+secondary = []
+assigned = "2026-03-16"
+rationale = ""
+
+[forges]
+github = "hyperpolymath/megadog"
+gitlab = "hyperpolymath/megadog"
+bitbucket = "hyperpolymath/megadog"
+
+[lineage]
+type = "standalone"
+parent = "Large-scale repo management"
+born = "2026-03-16"
