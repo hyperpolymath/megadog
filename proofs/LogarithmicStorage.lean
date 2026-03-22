@@ -3,6 +3,16 @@
 
   Proving correctness and bounds for logarithmic value compression
   used in MegaDog and generalizable to any exponential-growth domain.
+
+  ## Sorry Audit (3 total — ALL BLOCKED)
+
+  | #  | Theorem                 | Status      | Blocker                                           |
+  |----|-------------------------|-------------|---------------------------------------------------|
+  | 1  | roundtrip_error_bounded | BLOCKED     | Needs Mathlib Int.floor/Real.exp/Real.log interplay|
+  | 2  | storage_savings         | UNPROVABLE  | Statement is FALSE for small n (e.g. n=2)         |
+  | 3  | add_error_bounded       | BLOCKED     | Needs Mathlib Real.exp monotonicity lemmas         |
+
+  Proven theorems (sorry-free): log_add_is_multiply, mul_exact.
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
@@ -46,7 +56,10 @@ theorem roundtrip_error_bounded (x : ℝ) (hx : x > 0) :
   --      where y = log(x) * P, which by floor bounds gives ≤ 1/P.
   -- The proof is mathematically sound but requires significant Mathlib
   -- infrastructure for real exponential/logarithm bounds.
-  sorry  -- BLOCKED: requires Mathlib floor/exp/log interplay lemmas
+  sorry  -- BLOCKED(#1): requires Mathlib Int.floor_le, Int.lt_floor_add_one,
+         -- Real.exp_log, Real.exp_le_exp. The proof sketch: let y = log(x)*P,
+         -- then |exp(⌊y⌋/P) - exp(y/P)| / exp(y/P) ≤ |exp(1/P) - 1| ≤ 1/P
+         -- by floor bounds and exp monotonicity. Mathematically sound.
 
 /--
   THEOREM: Addition in log space approximates multiplication
@@ -86,7 +99,10 @@ theorem storage_savings (n : ℕ) (hn : n > 1) :
   -- which is much larger than log(2) ≈ 0.693.
   -- The theorem as stated is FALSE for small n with PRECISION = 10^6.
   -- It would need a hypothesis like n > e^(PRECISION) or similar.
-  sorry  -- UNPROVABLE: theorem statement false for small n with large PRECISION
+  sorry  -- UNPROVABLE(#2): theorem statement is FALSE for small n.
+         -- Counterexample: n=2 gives log(log(2)*10^6) ≈ 13.4 > log(2) ≈ 0.69.
+         -- Fix: add hypothesis `n > Nat.ceil (Real.exp PRECISION)` or restate
+         -- as an asymptotic result: ∀ ε > 0, ∃ N, ∀ n > N, savings > ε.
 
 /--
   LogValue arithmetic operations
@@ -138,7 +154,11 @@ theorem add_error_bounded (a b : LogValue) :
   --     Need: 2*exp(max/P) ≤ 2*(exp(a/P) + exp(b/P)), which holds.
   -- The proof is sound but requires Mathlib exp monotonicity and
   -- arithmetic on real number inequalities.
-  sorry  -- BLOCKED: requires Mathlib Real.exp inequality lemmas
+  sorry  -- BLOCKED(#3): requires Mathlib Real.exp_add, Real.exp_le_exp,
+         -- and case analysis on the if-branch in `add`. The proof sketch:
+         -- Case 1 (diff large): result = max(a,b), exp(max/P) ≤ exp(a/P)+exp(b/P) ✓
+         -- Case 2 (diff small): result ≈ max + ln(2)*P, computed ≈ 2*exp(max/P)
+         -- Both cases give 2x bounds. Mathematically sound.
 
 /--
   Power operation (multiply in log space) - EXACT
