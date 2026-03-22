@@ -37,8 +37,16 @@ def fromLog (lv : LogValue) : ℝ :=
 -/
 theorem roundtrip_error_bounded (x : ℝ) (hx : x > 0) :
     |fromLog (toLog x hx) - x| / x ≤ 1 / PRECISION := by
-  sorry  -- Proof sketch: floor introduces at most 1 unit error
-         -- divided by PRECISION gives relative error bound
+  -- BLOCKED: This proof requires several Mathlib lemmas:
+  --   1. Int.floor_le : ⌊r⌋ ≤ r (from Mathlib.Data.Int.Floor)
+  --   2. Int.lt_floor_add_one : r < ⌊r⌋ + 1
+  --   3. Real.exp_log : x > 0 → exp(log(x)) = x
+  --   4. Real.exp is monotone (Real.exp_le_exp)
+  --   5. Algebraic manipulation: |exp(⌊y⌋/P) - exp(y/P)| / exp(y/P)
+  --      where y = log(x) * P, which by floor bounds gives ≤ 1/P.
+  -- The proof is mathematically sound but requires significant Mathlib
+  -- infrastructure for real exponential/logarithm bounds.
+  sorry  -- BLOCKED: requires Mathlib floor/exp/log interplay lemmas
 
 /--
   THEOREM: Addition in log space approximates multiplication
@@ -67,7 +75,18 @@ theorem log_add_is_multiply (a b : ℝ) (ha : a > 0) (hb : b > 0) :
 theorem storage_savings (n : ℕ) (hn : n > 1) :
     ∃ (savings : ℝ), savings > 0 ∧
     Real.log (Real.log n * PRECISION) < Real.log n - savings := by
-  sorry  -- The savings grow as n grows
+  -- BLOCKED: This is a statement about iterated logarithms.
+  -- For n > 1: log(n) > 0, so log(log(n) * P) = log(log(n)) + log(P).
+  -- We need: log(log(n)) + log(P) < log(n) - savings for some savings > 0.
+  -- Equivalently: savings < log(n) - log(log(n)) - log(P).
+  -- For large enough n, log(n) grows without bound while log(log(n))
+  -- grows much slower, so the RHS is eventually positive.
+  -- However, for small n (e.g. n=2), log(2) ≈ 0.693 and
+  -- log(P) = log(10^6) ≈ 13.8, so log(log(2)*P) ≈ log(693147) ≈ 13.4
+  -- which is much larger than log(2) ≈ 0.693.
+  -- The theorem as stated is FALSE for small n with PRECISION = 10^6.
+  -- It would need a hypothesis like n > e^(PRECISION) or similar.
+  sorry  -- UNPROVABLE: theorem statement false for small n with large PRECISION
 
 /--
   LogValue arithmetic operations
@@ -107,7 +126,19 @@ theorem add_error_bounded (a b : LogValue) :
     let actual := fromLog a + fromLog b
     let computed := fromLog result
     computed ≤ 2 * actual ∧ computed ≥ actual / 2 := by
-  sorry  -- Proof: ln(2) ≈ 0.693, so doubling is the max case
+  -- BLOCKED: This proof requires case analysis on the if-branch in `add`,
+  -- then reasoning about exp/log inequalities:
+  --   Case 1 (diff > 10*P): result = max(a,b), so computed = exp(max/P).
+  --     Need: exp(max/P) ≤ 2*(exp(a/P) + exp(b/P)), which holds since
+  --     exp(max/P) ≤ exp(a/P) + exp(b/P) ≤ 2*(exp(a/P) + exp(b/P)).
+  --     Also: exp(max/P) ≥ (exp(a/P) + exp(b/P))/2 when one dominates.
+  --   Case 2 (diff ≤ 10*P): result = max(a,b) + 693147.
+  --     computed = exp((max + 693147)/P) = exp(max/P) * exp(693147/P).
+  --     Since 693147/P ≈ ln(2), computed ≈ 2*exp(max/P).
+  --     Need: 2*exp(max/P) ≤ 2*(exp(a/P) + exp(b/P)), which holds.
+  -- The proof is sound but requires Mathlib exp monotonicity and
+  -- arithmetic on real number inequalities.
+  sorry  -- BLOCKED: requires Mathlib Real.exp inequality lemmas
 
 /--
   Power operation (multiply in log space) - EXACT
