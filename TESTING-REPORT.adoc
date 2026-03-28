@@ -52,7 +52,7 @@ This report documents the comprehensive code analysis and testing of the MegaDog
 
 ==== ISSUE-001: Pony - Missing `suspicious_pattern_threshold` Field in GameConfig
 
-**File:** `/var/home/hyper/repos/megadog/server/src/config.pony`
+**File:** `/var$HOME/repos/megadog/server/src/config.pony`
 
 **Description:** The `UserSession.is_suspicious()` method references `config.suspicious_pattern_threshold`, but this field is not defined in the `GameConfig` class.
 
@@ -70,7 +70,7 @@ fun is_suspicious(config: GameConfig val): Bool =>
 
 ==== ISSUE-002: Pony - Duplicate Field Declaration in BlockMonitor
 
-**File:** `/var/home/hyper/repos/megadog/server/src/blockchain_client.pony`
+**File:** `/var$HOME/repos/megadog/server/src/blockchain_client.pony`
 
 **Description:** The `BlockMonitor` actor declares `_last_block` twice - once as a `var` in the field declarations and again at line 233.
 
@@ -91,7 +91,7 @@ var _last_block: U64
 
 ==== ISSUE-003: Pony - Self-Reference in BlockMonitor Callback
 
-**File:** `/var/home/hyper/repos/megadog/server/src/blockchain_client.pony`
+**File:** `/var$HOME/repos/megadog/server/src/blockchain_client.pony`
 
 **Description:** The `_poll_new_blocks` behavior captures `self = this` in a lambda, but tries to access `self._last_block` which violates Pony's reference capability rules.
 
@@ -112,7 +112,7 @@ _blockchain.get_current_block(
 
 ==== ISSUE-004: Vyper - Deprecated `shift()` Function
 
-**File:** `/var/home/hyper/repos/megadog/contracts/MegaDog.vy`
+**File:** `/var$HOME/repos/megadog/contracts/MegaDog.vy`
 
 **Description:** Uses deprecated `shift()` function. In Vyper 0.3.10+, bitwise shift should use `<<` and `>>` operators.
 
@@ -129,7 +129,7 @@ temp = temp >> 1
 
 ==== ISSUE-005: Vyper - Deprecated `shift()` in LogLib
 
-**File:** `/var/home/hyper/repos/megadog/contracts/LogLib.vy`
+**File:** `/var$HOME/repos/megadog/contracts/LogLib.vy`
 
 **Description:** Same deprecated `shift()` usage in the library contract.
 
@@ -151,7 +151,7 @@ temp = temp >> 1
 
 ==== ISSUE-007: Pony - Potential Integer Overflow in U256 Operations
 
-**File:** `/var/home/hyper/repos/megadog/server/src/dog.pony`
+**File:** `/var$HOME/repos/megadog/server/src/dog.pony`
 
 **Description:** `U256` type is used for dog IDs and fractal seed operations, but Pony's standard library may not include this type.
 
@@ -161,7 +161,7 @@ temp = temp >> 1
 
 ==== ISSUE-008: Pony - Missing Import for Range
 
-**File:** `/var/home/hyper/repos/megadog/server/src/dog.pony`
+**File:** `/var$HOME/repos/megadog/server/src/dog.pony`
 
 **Description:** Uses `Range(0, 8)` and similar but doesn't explicitly import Range from itertools.
 
@@ -173,7 +173,7 @@ temp = temp >> 1
 
 ==== ISSUE-009: Kotlin - Blocking I/O in Coroutine Context
 
-**File:** `/var/home/hyper/repos/megadog/android/app/src/main/kotlin/com/megadog/game/GameClient.kt`
+**File:** `/var$HOME/repos/megadog/android/app/src/main/kotlin/com/megadog/game/GameClient.kt`
 
 **Description:** Uses blocking `Socket`, `PrintWriter`, and `BufferedReader` instead of non-blocking alternatives. While wrapped in `Dispatchers.IO`, this is not ideal for a mobile game client.
 
@@ -183,7 +183,7 @@ temp = temp >> 1
 
 ==== ISSUE-010: Kotlin - Missing WebSocket Implementation
 
-**File:** `/var/home/hyper/repos/megadog/android/app/src/main/kotlin/com/megadog/game/GameClient.kt`
+**File:** `/var$HOME/repos/megadog/android/app/src/main/kotlin/com/megadog/game/GameClient.kt`
 
 **Description:** Uses raw TCP sockets instead of WebSocket protocol as documented in README. The server expects WebSocket frames but client sends raw JSON.
 
