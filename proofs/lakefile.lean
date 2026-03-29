@@ -12,4 +12,4 @@ lean_lib LogarithmicStorage where
   srcDir := "."
 
 require mathlib from git
-  "https://github.com/leanprover-community/mathlib4" @ "master"
+  "https://github.com/leanprover-community/mathlib4" @ "v4.16.0"
