@@ -5,15 +5,16 @@
 name = "server"
 
 [[functions]]
-name = "process_batch"
-source = "src/batch.rs"
-energy-budget-mj = 50.0
-carbon-budget-mg = 10.0
+name = "mint_starter_dog"
+source = "src/dog_manager.pony"
+energy-budget-mj = 40.0
+carbon-budget-mg = 8.0
 
 [[functions]]
-name = "render_page"
-source = "src/web.rs"
-energy-budget-mj = 5.0
+name = "broadcast_to_authenticated"
+source = "src/connection_manager.pony"
+energy-budget-mj = 20.0
+carbon-budget-mg = 4.0
 
 [carbon]
 provider = "static"
