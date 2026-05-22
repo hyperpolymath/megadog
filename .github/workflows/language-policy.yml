@@ -102,25 +102,25 @@ jobs:
           fi
           echo "✓ No Swift files found"
 
-      - name: Check for V-lang code
+      - name: Check for zig code
         run: |
-          # V-lang is banned as of 2026-04-10. Migration target: Zig.
-          # We detect by v.mod (V-lang's module manifest) rather than *.v
+          # zig is banned as of 2026-04-10. Migration target: Zig.
+          # We detect by v.mod (zig's module manifest) rather than *.v
           # extension because .v collides with Verilog hardware sources.
           V_MOD_FILES=$(find . -name "v.mod" -not -path "*/node_modules/*" -not -path "*/.git/*" || true)
           if [ -n "$V_MOD_FILES" ]; then
-            echo "::error::V-lang code found (detected via v.mod). V-lang is banned since 2026-04-10. Migrate to Zig."
+            echo "::error::zig code found (detected via v.mod). zig is banned since 2026-04-10. Migrate to Zig."
             echo "$V_MOD_FILES"
             exit 1
           fi
           # Also check for vpkg.json (alternative V package manifest)
           VPKG_FILES=$(find . -name "vpkg.json" -not -path "*/node_modules/*" -not -path "*/.git/*" || true)
           if [ -n "$VPKG_FILES" ]; then
-            echo "::error::V-lang code found (detected via vpkg.json). V-lang is banned since 2026-04-10. Migrate to Zig."
+            echo "::error::zig code found (detected via vpkg.json). zig is banned since 2026-04-10. Migrate to Zig."
             echo "$VPKG_FILES"
             exit 1
           fi
-          echo "✓ No V-lang code found"
+          echo "✓ No zig code found"
 
       - name: Check for Flutter/Dart files
         run: |

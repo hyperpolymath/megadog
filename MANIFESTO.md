@@ -79,6 +79,6 @@ This saves ~30% gas at scale and demonstrates that efficiency and ethics align.
 
 If you believe games should be games (not slot machines), contribute:
 - GitLab: https://gitlab.com/megadog/megadog
-- License: PMPL-1.0-or-later (copyleft, always open)
+- License: MPL-2.0 (copyleft, always open)
 
 The dogs deserve better. So do the players.

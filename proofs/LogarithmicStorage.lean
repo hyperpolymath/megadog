@@ -4,7 +4,7 @@
   Proving correctness and bounds for logarithmic value compression
   used in MegaDog and generalizable to any exponential-growth domain.
 
-  SPDX-License-Identifier: PMPL-1.0-or-later
+  SPDX-License-Identifier: MPL-2.0
 -/
 
 import Mathlib.Analysis.SpecialFunctions.Log.Basic
