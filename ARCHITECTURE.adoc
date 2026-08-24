@@ -1,8 +1,8 @@
-# MegaDog Architecture
+== MegaDog Architecture
 
-## System Overview
+=== System Overview
 
-```
+....
 ┌─────────────────────────────────────────────────────────────────┐
 │                     ANDROID CLIENT                               │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────────────┐  │
@@ -37,29 +37,26 @@
 │  │  • Transparent economics                                    ││
 │  └─────────────────────────────────────────────────────────────┘│
 └─────────────────────────────────────────────────────────────────┘
-```
+....
 
-## Component Details
+=== Component Details
 
-### Android Client (Kotlin)
+==== Android Client (Kotlin)
 
-**Responsibilities:**
-- Game UI and touch handling
-- GPU-accelerated Mandelbrot rendering
-- Local state caching
-- WebSocket communication with server
+*Responsibilities:* - Game UI and touch handling - GPU-accelerated
+Mandelbrot rendering - Local state caching - WebSocket communication
+with server
 
-**Key Classes:**
-- `MandelbrotRenderer`: OpenGL ES raymarching for 3D fractals
-- `DogManager`: Local dog state management
-- `GameClient`: WebSocket connection handler
-- `WallpaperExporter`: High-res fractal export
+*Key Classes:* - `+MandelbrotRenderer+`: OpenGL ES raymarching for 3D
+fractals - `+DogManager+`: Local dog state management - `+GameClient+`:
+WebSocket connection handler - `+WallpaperExporter+`: High-res fractal
+export
 
-### Pony Server
+==== Pony Server
 
-**Actor Model Architecture:**
+*Actor Model Architecture:*
 
-```
+....
 Main
  │
  ├── WebSocketServer ─────────────┐
@@ -71,43 +68,42 @@ Main
  │                                │
  └── AntiCheatEngine              │
       └── UserSession (per conn)──┘
-```
+....
 
-**Why Pony:**
-- Actor isolation prevents data races
-- Reference capabilities enforce memory safety
-- No GC pauses (critical for game servers)
-- Type-safe concurrency
+*Why Pony:* - Actor isolation prevents data races - Reference
+capabilities enforce memory safety - No GC pauses (critical for game
+servers) - Type-safe concurrency
 
-### Vyper Smart Contracts
+==== Vyper Smart Contracts
 
-**Storage Optimisation:**
+*Storage Optimisation:*
 
-```
+....
 Traditional uint256:  32 bytes per value
 Logarithmic int128:   16 bytes per value (50% reduction)
 Batch commits:        ~80 gas per dog vs ~5000 gas individual
-```
+....
 
-**Contract Functions:**
-- `mint_starter_dog()`: Create initial dog for new players
-- `merge_dogs()`: Combine two same-level dogs
-- `apply_dog_diff_batch()`: Batched state updates from server
-- `prestige_reset()`: Milkshake blender reset mechanic
-- `verify_dog_rarity()`: Public rarity verification
+*Contract Functions:* - `+mint_starter_dog()+`: Create initial dog for
+new players - `+merge_dogs()+`: Combine two same-level dogs -
+`+apply_dog_diff_batch()+`: Batched state updates from server -
+`+prestige_reset()+`: Milkshake blender reset mechanic -
+`+verify_dog_rarity()+`: Public rarity verification
 
-### Mandelbrot Dogtags
+==== Mandelbrot Dogtags
 
-**Generation Algorithm:**
+*Generation Algorithm:*
 
-1. Dog parameters (level, merge history, timestamp) → seed
-2. Seed → Mandelbulb parameters (iterations, rotation, bailout)
-3. Parameters → GPU raymarching → 3D fractal
-4. Fractal → PNG export + IPFS hash
+[arabic]
+. Dog parameters (level, merge history, timestamp) → seed
+. Seed → Mandelbulb parameters (iterations, rotation, bailout)
+. Parameters → GPU raymarching → 3D fractal
+. Fractal → PNG export + IPFS hash
 
-**Shader Pipeline:**
+*Shader Pipeline:*
 
-```glsl
+[source,glsl]
+----
 // Signed Distance Function for Mandelbulb
 float mandelbulbSDF(vec3 pos, float power) {
     vec3 z = pos;
@@ -137,13 +133,13 @@ float mandelbulbSDF(vec3 pos, float power) {
     }
     return 0.5 * log(r) * r / dr;
 }
-```
+----
 
-## Data Flow
+=== Data Flow
 
-### Merge Operation
+==== Merge Operation
 
-```
+....
 1. User taps "Merge" on two dogs
    │
 2. Android sends merge request via WebSocket
@@ -165,11 +161,11 @@ float mandelbulbSDF(vec3 pos, float power) {
 7. Server submits Merkle root to blockchain
    │
 8. Client receives confirmation, renders new fractal
-```
+....
 
-### Batch Aggregation
+==== Batch Aggregation
 
-```
+....
 Individual actions → DogStateManager
                           │
                           ▼
@@ -188,40 +184,43 @@ Individual actions → DogStateManager
                           │
                           ▼
                ~80 gas per dog action
-```
+....
 
-## Security Model
+=== Security Model
 
-### Threat Mitigation
+==== Threat Mitigation
 
-| Threat | Mitigation |
-|--------|------------|
-| Bot farming | Rate limiting + pattern detection |
-| State manipulation | Server-side validation + blockchain proof |
-| Replay attacks | Nonce tracking + signature verification |
-| Data theft | No PII stored, public blockchain |
+[cols=",",options="header",]
+|===
+|Threat |Mitigation
+|Bot farming |Rate limiting + pattern detection
+|State manipulation |Server-side validation + blockchain proof
+|Replay attacks |Nonce tracking + signature verification
+|Data theft |No PII stored, public blockchain
+|===
 
-### Trust Boundaries
+==== Trust Boundaries
 
-```
+....
 Trusted:      Pony server (validates all actions)
 Trustless:    Blockchain (anyone can verify)
 Untrusted:    Android client (never trust client state)
-```
+....
 
-## Configuration
+=== Configuration
 
 All configuration via Nickel for type safety:
 
-- `config/project.ncl`: Project metadata, RSR compliance
-- `config/game.ncl`: Economy, fractals, anti-cheat
-- `config/ci.ncl`: GitLab CI pipeline
+* `+config/project.ncl+`: Project metadata, RSR compliance
+* `+config/game.ncl+`: Economy, fractals, anti-cheat
+* `+config/ci.ncl+`: GitLab CI pipeline
 
 Exported to JSON/Dhall for runtime consumption.
 
-## Deployment
+=== Deployment
 
-```bash
+[source,bash]
+----
 # Development
 nix develop
 just build-all
@@ -233,4 +232,4 @@ just container-run
 # Blockchain
 just contracts-deploy testnet
 just contracts-verify testnet $ADDRESS
-```
+----
